@@ -1,0 +1,13 @@
+- Create a helper to build the environment containing the sheets' definitions
+
+- Each row requires its own environment
+	- Write a helper that takes a list of value columns, and returns a list of environments (1 to 1 mapping)
+
+- Write a helper that takes a single formula and a list of environments (from before) and returns a list of values
+
+! Some functions will require the use of foldl
+
+For the written explanations:
+- Describe 3 of your major helper functions (at time of writing these are: getEnvironment, buildDataEnvs, doCalculations). What are their purposes, provude summaries for each.
+- Reflect on the use of Haskell. What features were helpful? What was challenging?
+- If working in a team, describe your contribution to the project.

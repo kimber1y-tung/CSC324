@@ -1,0 +1,171 @@
+OLD CRAPPY VERSION OF type-listo
+
+#;(define (type-listo exprs env lst)
+  (conde
+   [(== exprs '()) (== lst '())]
+   [(fresh (fexpr rexprs ftype rtypes)
+           (== (cons fexpr rexprs) exprs)
+           (== (cons ftype rtypes) lst)
+           (conde
+            [(symbolo fexpr)
+             (=/= env '())
+             (conde
+              [(== ftype 'num)
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype 'str)
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype 'bool)
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((num num) num))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((num num) bool))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((str str) str))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((bool) bool))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((num) str))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)]
+              [(== ftype '((str) num))
+               (typeo fexpr env ftype)
+               (type-listo rexprs env rtypes)])]
+            [(symbolo fexpr)
+             (== env '())
+             (== ftype 'error)
+             (type-listo rexprs env rtypes)]
+            [(numbero fexpr)
+             (== ftype 'num)
+             (type-listo rexprs env rtypes)]
+            [(stringo fexpr)
+             (== ftype 'str)
+             (type-listo rexprs env rtypes)]
+            [(boolo fexpr)
+             (== ftype 'bool)
+             (type-listo rexprs env rtypes)]))]))
+
+
+(define (builtino obj)
+  (conde
+   [(== obj '+)]
+   [(== obj '-)]
+   [(== obj '*)]
+   [(== obj '/)]
+   [(== obj '>)]
+   [(== obj '=)]
+   [(== obj '>=)]
+   [(== obj '++)]
+   [(== obj 'num->str)]
+   [(== obj 'len)]
+   [(== obj '!)]))
+
+(define (helpero id env body type)
+  (fresh (first rest)
+         (conde
+          [(pairo body)
+           (fresh (op optype farg rargs)
+                  (== body (cons op (cons farg rargs)))
+                  
+                  (conde
+                   [(== id farg)
+                    (== type 'some)]
+                   [(=/= id farg)
+                    #;(== type (cons op rargs))
+                    (helpero id env (cons op rargs) type)]))]
+          [(symbolo body)
+           (== body id)
+           (typeo id env type)])
+         ))
+
+(define (arg-foro id body res)
+  (conde
+   [(pairo body)
+    (fresh (first rest)
+           (== body (cons first rest))
+           (conde
+            [(== first id)
+             (== res #t)]
+            [(=/= first id)
+             (arg-foro id rest res)]
+            #;[(=/= first id)
+             (== rest '())
+             (== res #f)]))]
+   [(conde
+     [(symbolo body)
+      (== id body)
+      (== res #t)]
+     [(== res #f)])]))
+
+(println "helpero")
+(run 1 (x) (helpero 'y '() '(+ (+ 1 2) y) x))
+(println "arg-foro")
+(run 1 (x) (arg-foro 'y '(+ y 1) x))
+
+
+==========================
+== OLD CONDITION SEGMENT FOR FUNCTION DEFNS
+==========================
+[(fresh (first rest ids body bin br new-env types restype argtypes fill args)
+           (== expr (cons first rest))
+           (== first 'lambda)
+           (== rest (list ids body))
+           #;(update-envo ids env new-env)
+           (conde
+            [(pairo body)
+             (== body (cons bin br))
+             #;(== type bin)
+             #;(type-listo2 body new-env type)
+             #;(== body (cons bin br))
+             (typeo bin env types)
+             (== types (list fill restype))
+             #;(== types (cons (cons fill (list restype)) args)) ;Grabs restype
+             (helpero ids body env argtypes)
+             (== type (list argtypes restype))]
+            [(fresh (idtypes)
+                    (fill-idso ids env idtypes)
+                    (conde
+                     [(symbolo body)
+                      (fresh (restype)
+                             (typeo body env restype)
+                             (== type (list idtypes restype)))]
+                     [(numbero body)
+                      (== type (list idtypes 'num))]
+                     [(stringo body)
+                      (== type (list idtypes 'str))]
+                     [(boolo body)
+                      (== type (list idtypes 'bool))]))]
+            #;[(symbolo body)
+             (== type 'nonbod)
+             #;(typeo body new-env type)]
+            #;[(numbero body)
+             (fresh (idtypes)
+                    (fill-idso ids env idtypes)
+                    (== type (list idtypes 'num)))
+             #;(== type 'nonbod)]
+            #;[(stringo body)
+             (== type 'nonbod)]
+            #;[(boolo body)
+             (== type 'nonbod)])
+           #;(type-listo body new-env types)
+           #;(== type types)
+           #;(typeo body new-env type)
+           #;(== rest (cons ids (cons expr '())))
+           #;(== type new-env))]
+   #;[(fresh (first rest ids body)
+             (== expr (cons first rest))
+             (== first 'lambda)
+             (== rest (list ids body))
+             (conde
+              [(pairo body)
+               (fresh (op optype args farg rargs)
+                      (== body (cons op args))
+                      ( )
+                      (typeo op env optype))]
+              []))]

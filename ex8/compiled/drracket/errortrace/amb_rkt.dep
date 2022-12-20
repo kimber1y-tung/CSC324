@@ -1,0 +1,1 @@
+("7.8" racket ("ace75e3d54ae34a363039fd31dd538fb9688a802" . "d74bba8ea84ea1e5208d54c737c24af9cf37ff35") #"/Users/kimberlytung/Desktop/CSC324/ex8/stream.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"control.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

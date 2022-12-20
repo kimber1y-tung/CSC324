@@ -1,0 +1,16 @@
+cabal-version: 2.4
+name: Ex4
+version: 1.0
+stability: experimental
+x-ghc-framework-version: 8.6.4-13.14-2
+x-last-ide-version: HfM1.7.0
+
+executable Ex4
+    main-is: Ex4.hs
+    other-modules:
+        Ex4Types
+    default-language: Haskell2010
+    build-depends:
+        containers -any,
+        base -any,
+        QuickCheck -any
